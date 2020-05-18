@@ -1,0 +1,61 @@
+#include <windows.h>
+#include "ui_const.h"
+
+999 ICON "COGS.ico"
+
+ID_MENU MENU
+BEGIN
+  POPUP "&File"
+  BEGIN
+    MENUITEM "&Open",ID_OPEN
+    MENUITEM "&Reload   (R)",ID_RELOAD
+    MENUITEM "&View Source",ID_VIEW_SOURCE
+    MENUITEM "&Exit",ID_EXIT
+  END
+
+  POPUP "&View"
+  BEGIN
+    MENUITEM "Set resolution...",ID_SET_RES
+  END
+
+  POPUP "&Help"
+  BEGIN
+    MENUITEM "&About",ID_ABOUT
+    MENUITEM "&Help",ID_HELP
+  END
+END
+
+600 DIALOG DISCARDABLE 0,0,220,170
+CAPTION "Set resolution"
+BEGIN
+  LTEXT "Viewport width",-1,     10,10,80,10
+  EDITTEXT    601,               90,10,50,10,ES_NUMBER
+  LTEXT "(screenw)",-1,         150,10,80,10
+
+  LTEXT "Viewport height",-1,    10,30,80,10
+  EDITTEXT    602,               90,30,50,10,ES_NUMBER
+  LTEXT "(screenh)",-1,         150,30,80,10
+
+  LTEXT "Viewport x-offset",-1,  10,50,80,10
+  EDITTEXT    603,               90,50,50,10,ES_NUMBER
+  LTEXT "(basex)",-1,          150,50,80,10
+
+  LTEXT "Viewport y-offset",-1,  10,70,80,10
+  EDITTEXT    604,               90,70,50,10,ES_NUMBER
+  LTEXT "(basey)",-1,          150,70,80,10
+
+  LTEXT "Window width",-1,       10,90,80,10
+  EDITTEXT    605,               90,90,50,10,ES_NUMBER
+  LTEXT "(windoww)",-1,         150,90,80,10
+
+  LTEXT "Window height",-1,      10,110,80,10
+  EDITTEXT    606,               90,110,50,10,ES_NUMBER
+  LTEXT "(windowh)",-1,         150,110,80,10
+
+  LTEXT "Rotat'n (0, 90, 180, 270)",-1, 10,130,100,10
+  EDITTEXT    607,               90,130,50,10,ES_NUMBER
+  LTEXT "(orient)",-1,          150,130,80,10
+
+  DEFPUSHBUTTON "&OK", 608,      10,150,  50,14
+  PUSHBUTTON "&Cancel",609,      70,150,  50,14
+END
