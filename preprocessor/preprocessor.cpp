@@ -1933,7 +1933,7 @@ void processFile(string fname, map<string,Var> &vars, const list<string> &includ
 // 
 // defines[0,1,...,n] = << MSVC specific defines >>
 // defines[n+1]="#define Foo 2"
-// defines[n+1]="#define BAR 1" (in -D, value defaults to "1" be we must specify this)
+// defines[n+1]="#define BAR 1" (in -D, value defaults to "1" but we must specify this)
 // defines[n+2]="#define FUNC(X,Y) X+Y"
 // includePaths[0,1,..,m]= << MSVC specific includes >> 
 // includePaths[m+1]="path/to/headers" (forward or backslashes allowed)

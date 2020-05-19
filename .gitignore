@@ -9,9 +9,13 @@
 *.s
 *.i
 *.pp
+*.user
+
 .vs/
 x64/
 preprocessor/x64/
+preprocessor/postprocessed/
+preprocessor/flattened/
 
 # Linker output
 *.ilk
