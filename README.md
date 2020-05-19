@@ -28,6 +28,8 @@ string preprocess(string mode, string infile, string outfile, list<string> defin
 
 This preprocesses a file "infile" (`.c`, `.cpp`, `.rc` etc) and writes the result to a single file "outfile", processing all `#include, #if` etc. If infile is an empty string, nothing is written to disk and the output is instead returned as a string. The function also sets "included": a list of all files which were directly and indirectly included during the preprocess step. (if preprocessing a resource file, `.rc`, included assets such as bitmaps files are also shown in this list)
 
+If the preprocess fails, a string exception is thrown.
+
 * "defines" specifies predefined macros. It is a list of strings each of which is a regular #define statement
 
 * "includePaths" specifies include paths to search. It is a list of include paths (strings) either absolute path or relative to the present working directory
@@ -80,7 +82,7 @@ The resulting preprocessor executable can be called as follows:
 preprocessor.exe infile.c [-Ddefine[=val]] [-Ipath] [-FIheader.h] [-check] [-flatten] [-dependencies]
 ```
 
-If `-check` is specified then, after preprocessing the file, the MSVC preprocessor is called on the same file and the two postprocessed files are compared (ignoring white space differences). A success or fail message is output. If using -check you must run the above command in the "x64 native tools command prompt for VS2019" so that the program can run cl.exe.
+If `-check` is specified then, after preprocessing the file, the MSVC preprocessor is called on the same file and the two postprocessed files are compared (ignoring white space differences). A success or fail message is output. If using -check you must run the above command in the "x64 native tools command prompt for VS2019" so that the program can run `cl.exe`.
 
 -flatten and -dependencies specify using the corresponding mode as described above. If neither is specified the "full" mode is used (check only makes sense for the "full" mode)
 
