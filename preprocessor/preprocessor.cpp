@@ -1785,7 +1785,8 @@ void processLine(list<list<Token>>::iterator &it_line, map<string,Var> &vars, co
 void processFile(string fname, map<string,Var> &vars, const list<string> &includePaths, list<string> &included)
 {
     // ----------------------------------------------------------------------
-    // Open the file, read the whole contents into allocated char array "source"
+    // Open the file, read the whole contents into allocated char array "source" (NULL terminated)
+    // For Unix lines will be terminated with \n, for Windows with \r\n
     // ----------------------------------------------------------------------
 
     FILE* fp = fopen(fname.c_str(), "rb");
@@ -1815,10 +1816,11 @@ void processFile(string fname, map<string,Var> &vars, const list<string> &includ
 
     // ----------------------------------------------------------------------
     // Process each line into a list of Tokens and add them to "lines"
+    // Add in \0 to split the file into lines (account for Windows or Unix line endings)
     // When getTokLine is called:
     // st points to the beginning of the next line
     // ed points to the \0 which terminates this line
-    // if it's a blank line, the line is an empty list
+    // if it's a blank line, the created line is an empty list of Tokens
     // Also concatenate lines with backslash-newline, but add blank lines so number of lines is the same
     // ----------------------------------------------------------------------
 
@@ -1832,16 +1834,16 @@ void processFile(string fname, map<string,Var> &vars, const list<string> &includ
     while (!done)
     {
         char* ed = st;
-        int extra = 0;
-        while (*ed != '\n' && *ed != '\r' && *ed != '\0')
+        int extra = 0;           // extra blank lines to add if continuation to keep line numbers correct
+        while (*ed != '\r' && *ed != '\n' && *ed != '\0')
         {
-            if (*ed == '\\' && *(ed + 1) == '\n')  // continuation
+            if (*ed == '\\' && *(ed + 1) == '\n')  // continuation (Unix line ending)
             {
                 *ed = ' ';
                 *(ed + 1) = ' ';
                 extra++;
             }
-            else if (*ed == '\\' && *(ed+1)=='\r' && *(ed+2)=='\n')
+            else if (*ed == '\\' && *(ed + 1) == '\r' && *(ed + 2) == '\n') // continuation (Windows line ending)
             {
                 *ed = ' ';
                 *(ed + 1) = ' ';
@@ -1850,8 +1852,16 @@ void processFile(string fname, map<string,Var> &vars, const list<string> &includ
             }
             ed++;
         }
-        if (*ed == '\0') done = true;
-        *ed = '\0';
+
+        int skip;
+        if (*ed == '\0') 
+            done = true;
+        else if (*ed == '\r' && *(ed + 1) == '\n') 
+            skip = 2;
+        else if (*ed == '\n') 
+            skip = 1;
+
+        *ed = '\0';  // insert end of line marker
 
         lines.push_back(getTokLine(st));
         g_lineno++;
@@ -1862,11 +1872,7 @@ void processFile(string fname, map<string,Var> &vars, const list<string> &includ
             g_lineno++;
         }
 
-        if (!done)
-        {
-            st = ed + 1;
-            if (*st == '\n') st++;
-        }
+        if (!done) st = ed + skip;
     }
 
     free(source);
