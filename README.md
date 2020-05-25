@@ -16,6 +16,7 @@ Some extensions are supported (needed to deal with `windows.h` etc)
 * `defined(x)` permitted within a macro definition
 * $ allowed in identifier names
 * Non-standard symbols permitted such as @ (these are used in `windows.h` and its descendants, for some reason...)
+* `#pragma once` supported. Also MSVC's `#pragma push_macro` and `pop_macro` are supported. Other pragmas as simply output for the compiler to deal with.
 
 # Using the library
 
@@ -95,7 +96,7 @@ As described the example main program attempts to imitate the behaviour of the M
     const string windowsKits = "C:/Program Files (x86)/Windows Kits/10/include/10.0.18362.0";
 ```
 
-Then, build the code in Visual Studio (Build > Build Solution) in both Debug and Release modes.
+Then, build the code in Visual Studio (Build > Build Solution) in both Debug and Release modes. Please build the x64 version as the test scripts will use that executable.
 
 # Testing the code
 
