@@ -31,11 +31,13 @@ This preprocesses a file "infile" (`.c`, `.cpp`, `.rc` etc) and writes the resul
 
 If the preprocess fails, a string exception is thrown.
 
-* "defines" specifies predefined macros. It is a list of strings each of which is a regular #define statement
+The remaining arguments are as follows:
+
+* "defines" specifies predefined macros. It is a list of strings each of which is a regular `#define` statement
 
 * "includePaths" specifies include paths to search. It is a list of include paths (strings) either absolute path or relative to the present working directory
 
-* "forceIncludes" specifies force includes. It is a list of strings each of which is a regular #include statement. The file is processed as if these include statements appeared at the beginning.
+* "forceIncludes" specifies force includes. It is a list of strings each of which is a regular `#include` statement. The file is processed as if these include statements appeared at the beginning.
 
 * "attributeMap" specifies the behaviour of the `__has_cpp_attributes` function. It is a string-string map, eg `attributeMap["nodiscard"] = "201907L"` might be set. To turn off this feature, pass in an empty map. In that case `__has_cpp_attribute` will be undefined and the function can't be used
 
@@ -69,9 +71,13 @@ includePaths[0,1,..,m]= << MSVC specific includes >>
 includePaths[m+1]="path/to/headers" (forward or backslashes allowed)
 
 forceIncludes[0]="#include \"bar.h\""
+
+attributeMap["nodiscard"] = "201907L"  // etc
+
+preprocess("full", "foo.c", "foo.i", defines, includePaths, forceIncludes, included, attributeMap, true);
 ```
 
-(see main.cpp for a full set of MSVC-specific defines and includes)
+(see `main.cpp` for a full set of MSVC-specific defines and includes)
 
 # Example main program
 
@@ -85,7 +91,7 @@ preprocessor.exe infile.c [-Ddefine[=val]] [-Ipath] [-FIheader.h] [-check] [-fla
 
 If `-check` is specified then, after preprocessing the file, the MSVC preprocessor is called on the same file and the two postprocessed files are compared (ignoring white space differences). A success or fail message is output. If using -check you must run the above command in the "x64 native tools command prompt for VS2019" so that the program can run `cl.exe`.
 
--flatten and -dependencies specify using the corresponding mode as described above. If neither is specified the "full" mode is used (check only makes sense for the "full" mode)
+`-flatten` and `-dependencies` specify using the corresponding mode as described above. If neither is specified the "full" mode is used (`-check` only makes sense for the "full" mode)
 
 # Building the code
 
@@ -106,7 +112,7 @@ Open "x64 native tools command prompt for VS2019", cd to `preprocessor/examples`
 testall.bat
 ```
 
-This will run preprocessor.exe on several examples (C, C++ and resource files) and check the result against MSVC output. If any tests fail, the batch file will tell you. The output from our preprocessor is written in `.pp` files and that from MSVC is written in `.i` files so you can examine these directly.
+This will run `preprocessor.exe` on several examples (C, C++ and resource files) and check the result against MSVC output. If any tests fail, the batch file will tell you. The output from this preprocessor is written in `.pp` files and that from MSVC is written in `.i` files so you can examine these directly.
 
 Next, cd to `preprocessor` and run
 
